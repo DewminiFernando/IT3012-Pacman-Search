@@ -86,13 +86,58 @@ def depthFirstSearch(problem: SearchProblem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = util.Stack()  # DFS uses LIFO order
+
+    startState = problem.getStartState()
+    fringe.push((startState, []))  # Store state with path taken
+
+    expanded = set()  # Track expanded states to avoid cycles
+
+    while not fringe.isEmpty():
+        state, actions = fringe.pop()
+
+        if problem.isGoalState(state):
+            return actions   
+
+        if state in expanded:
+            continue
+
+        expanded.add(state) 
+
+        for successor, action, stepCost in problem.getSuccessors(state):
+            if successor not in expanded:
+                newActions = actions + [action]
+                fringe.push((successor, newActions))  
+
+    return []   
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    fringe = util.Queue()  # BFS uses FIFO order
+
+    startState = problem.getStartState()
+    fringe.push((startState, []))  # Store state with path taken
+
+    expanded = set()  # Track expanded states for graph search
+
+    while not fringe.isEmpty():
+        state, actions = fringe.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state in expanded:
+            continue
+
+        expanded.add(state)
+
+        for successor, action, stepCost in problem.getSuccessors(state):
+            if successor not in expanded:
+                newActions = actions + [action]
+                fringe.push((successor, newActions))
+
+    return []
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
